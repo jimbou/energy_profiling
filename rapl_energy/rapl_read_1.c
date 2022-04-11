@@ -19,7 +19,7 @@ unsigned long long int readen(char *path) {
       //Do nothing.
     }
     old = strtoull(line, NULL, 10);
-    printf("%llu", data);
+    printf("old %llu", old);
     while (data == old ){
       data = strtoull(line, NULL, 10);  
     }
