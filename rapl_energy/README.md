@@ -2,7 +2,7 @@
 This folder contains llvm passes that try to measure the energy consumed by each BB of a programm .
 
 
-foo.c is the test c file
+foo.c is the test c file \n
 rapl_read_1.c is the rapl read function in c it is included in the foo c and should be included in all test files
 rapl_pass.cpp is the final pass:
 it first prints for all the bb their id and then their instructions in llvm IR
