@@ -1,0 +1,28 @@
+prota prepei na kano 
+mkdir build
+cd build
+cmake ..
+make
+cd ..
+
+episis prostheto sto pass onoma me :
+static RegisterPass<SkeletonPass> X("skeleton", "a useless pass");
+
+meta 2 enallakrikes :
+
+1) 
+clang -emit-llvm -c example.c
+opt -load build/skeleton/libSkeletonPass.* -skeleton < example.bc > example
+meta : chmod +x example
+
+
+2) 
+clang -S -emit-llvm -Xclang -disable-O0-optnone foo.c
+opt -load build/skeleton/libSkeletonPass.* -skeleton -S foo.ll
+
+
+
+
+ama thelo na tupono se arxeio prostheto stin entoli otp sto telos >out1.txt 2>out2.txt
+to out1 einai to outs() to out2 einai to errs()
+an thelo kai to outs() kai to errs() sto idio arxeio out.txt tote kano &>out.txt
