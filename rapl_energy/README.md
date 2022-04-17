@@ -7,6 +7,7 @@ rapl_read_1.c is the rapl read function in c it is included in the foo c and sho
 
 rapl_pass.cpp is the final pass:
 
+
 it first prints for all the bb their id and then their instructions in llvm IR
 
 it then adds this instructions in each basic block
