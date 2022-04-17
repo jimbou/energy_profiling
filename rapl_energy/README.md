@@ -3,7 +3,6 @@ This folder contains llvm passes that try to measure the energy consumed by each
 
 
 foo.c is the test c file 
-
 rapl_read_1.c is the rapl read function in c it is included in the foo c and should be included in all test files
 
 rapl_pass.cpp is the final pass:
