@@ -12,3 +12,9 @@ We have included 2 more folders :
 2) for the creation of an energy prediction mechnanism based on the preprocessed data
 
 How to run an llvm pass:
+
+# rapl read
+To read rapl measurements you first need to enter the following line into the terminal:
+```
+sudo chmod -R a+r /sys/class/powercap/intel-rapl
+```
