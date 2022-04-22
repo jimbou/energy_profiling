@@ -6,7 +6,9 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-int readrapl() {
+#define ITERATIONS 100
+
+unsigned long long int readrapl() {
   
     /*
     readrapl function returns the rapl energy at a specific time
@@ -82,7 +84,7 @@ int main() {
     fprintf(fpt, "energy,iteration\n");
 
     //iterate through the part we want to measure 1000 times
-    for (int o = 0; o < 1000; o++){
+    for (int o = 0; o < ITERATIONS; o++){
         unsigned long long int tic, tac, energy;
         tic = 0;
         tac = 69;
