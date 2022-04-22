@@ -15,7 +15,8 @@ using namespace llvm;
 namespace{
 struct SkeletonPass : public ModulePass{
     static char ID;
-    Function *monitor;    // this will be the identifier for the print function
+    Function *monitorbb;    // this will be the identifier for the print function
+    Function *monitorfunc;    // this will be the identifier for the print function
     Function *raplread;   // this will be the identifier for the rapl read function
 
     SkeletonPass() : ModulePass(ID) {}
@@ -25,15 +26,36 @@ struct SkeletonPass : public ModulePass{
 
         for(Module::iterator F = M.begin(), E = M.end(); F!= E; ++F)
         {
-            if(F->getName() == "print"){
-                monitor = cast<Function>(F);  // cast the print function to the monitor pointer
+            if(F->getName() == "printbb"){
+                monitorbb = cast<Function>(F);  // cast the print function to the monitor pointer
                 continue;
             }
             
+            if(F->getName() == "printfunc"){
+                monitorfunc = cast<Function>(F);  // cast the print function to the monitor pointer
+                continue;
+            }
+
             if(F->getName() == "readrapl"){
                 raplread = cast<Function>(F);  // cast the readrapl function to the raplread pointer
                 continue;
             }
+            Function::iterator FI = F->begin();
+            Function::iterator FF = F->end();
+            FF--;
+            BasicBlock::iterator FBI = FI->begin(); 
+
+            Instruction *instn = &*FBI;
+            IRBuilder<> builder1(instn);
+            Value *v = builder1.CreateGlobalStringPtr(F->getName(), "str");
+            ArrayRef<Value *> args(v);
+            Instruction *newInstn = CallInst::Create(monitorfunc, args, "");    // create the first insttruction to be added : a call to the print function
+            FI->getInstList().insert(FBI, newInstn); 
+
+            Instruction *newInst3 = CallInst::Create(raplread, "");      //create the second instruction to be added : a call to the readrapl function which reads rapl energy
+            FI->getInstList().insert(FBI, newInst3); 
+            FF->getInstList().push_back(newInst3); 
+             
 
             for(Function::iterator BB = F->begin(), E = F->end(); BB != E; ++BB)
             {
@@ -52,17 +74,17 @@ struct SkeletonPass : public ModulePass{
                     IRBuilder<> builder(inst);
                     Value *v = builder.CreateGlobalStringPtr(BB->getName(), "str");
                     ArrayRef<Value *> args(v);
-                    Instruction *newInst = CallInst::Create(monitor, args, "");    // create the first insttruction to be added : a call to the print function
+                    Instruction *newInst = CallInst::Create(monitorbb, args, "");    // create the first insttruction to be added : a call to the print function
                     BB->getInstList().insert(BI, newInst);                         // we give as argument the name of the bb and we insert it at the beggining f the bb
               
-                  
+                  /*
               
                     Instruction *newInst0 = CallInst::Create(raplread, "");      //create the second instruction to be added : a call to the readrapl function which reads rapl energy
                     BB->getInstList().insert(BI, newInst0);                       // we insert it at the beggining of the basic block and it will print two energy values
               
                     Instruction *newInst1 = CallInst::Create(raplread, "");     //create the third instruction to be added : a call to the readrapl function which reads rapl energy
                     BB->getInstList().push_back(newInst1);                     // we insert it at the end of the basic block and it will print two energy values
-                                       
+                      */                 
 
                 
             }
